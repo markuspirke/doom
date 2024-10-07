@@ -1,0 +1,53 @@
+#+title: My personal emacs configuration.
+#+PROPERTY: header-args:emacs-lisp :tangle ./config.el
+
+* Theme
+#+begin_src emacs-lisp :tangle yes
+(setq doom-theme 'doom-palenight)
+#+end_src
+* UI
+** Line numbers
+#+begin_src emacs-lisp :tangle yes
+(column-number-mode)
+(global-display-line-numbers-mode t)
+(setq display-line-numbers-type 'relative) ;; This sets relative line numbers.
+#+end_src
+** Transparency
+#+begin_src emacs-lisp :tangle yes
+(defvar mp/frame-transparency '(90 . 90))
+#+end_src
+* Org mode
+** Auto-tangle Configuration Files
+
+This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
+
+#+begin_src emacs-lisp :tangle yes
+
+  ;; Automatically tangle our Emacs.org config file when we save it
+  (defun mp/org-babel-tangle-config ()
+    (when (string-equal (file-name-directory (buffer-file-name))
+                        (expand-file-name user-emacs-directory))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'mp/org-babel-tangle-config)))
+
+#+end_src
+** Nice Bullets
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+#+begin_src emacs-lisp :tangle yes
+
+  ;; (use-package org-bullets
+  ;;   :hook (org-mode . org-bullets-mode)
+  ;;   :custom
+  ;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+#+end_src
+** Org Roam
+We want to use this package as our note taking system.
+*** Directory
+Org roam directory will be located in the Zettelkasten directory.
+#+begin_src emacs-lisp :tangle yes
+(setq org-roam-directory "~/Zettelkasten")
+#+end_src
