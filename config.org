@@ -2,8 +2,14 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ./config.el
 
 * Theme
+We use the package circadian to change between a light and dark theme.
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-palenight)
+(use-package circadian
+  :ensure t
+  :config
+  (setq circadian-themes '(("6:00" . doom-one-light)
+                           ("15:00" . doom-palenight)))
+  (circadian-setup))
 #+end_src
 * UI
 ** Line numbers
