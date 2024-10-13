@@ -35,6 +35,40 @@ We use the package circadian to change between a light and dark theme.
   :ensure t)
 #+end_src
 * Org mode
+** General things
+#+begin_src emacs-lisp :tangle yes
+(use-package org
+        :config
+        (setq org-ellipsis " ▾") ;; symbol if header is closed
+        (setq org-agenda-start-with-log-mode t)
+        (setq org-log-done 'time)
+        (setq org-log-into-drawer t)
+        (setq org-directory "~/Org/") ;; last / was necessary
+        (setq org-agenda-files '("todos.org"))
+        (setq org-agenda-hide-tags-regexp ".*")
+)
+
+(with-eval-after-load 'org (global-org-modern-mode))
+
+(defun mp/org-agenda-open-hook ()
+  "Hook to be run when org-agenda is opened"
+  (olivetti-mode))
+
+(add-hook 'org-agenda-mode-hook 'mp/org-agenda-open-hook)
+
+(setq org-agenda-prefix-format '(
+  (agenda . " %?-2i %t ")
+  (todo . " %i %-12:c")
+  (tags . " %i %-12:c")
+  (search . " %i %-12:c")))
+
+(setq org-agenda-category-icon-alist
+      '(("work" (nerd-icons-faicon "" :height 0.8 :v-adjust 0) nil nil :ascent center)
+        ("teaching" (nerd-icons-faicon "" :height 0.8 :v-adjust 0) nil nil :ascent center)
+        ("home" (nerd-icons-mdicon "󰏚󰠧" :height 0.8 :v-adjust 0) nil nil :ascent center)
+        ("privat" (nerd-icons-mdicon "󰏚" :height 0.8 :v-adjust 0) nil nil :ascent center)
+        ))
+#+end_src
 ** Auto-tangle Configuration Files
 
 This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
@@ -73,4 +107,30 @@ We want to use this package as our note taking system.
 Org roam directory will be located in the Zettelkasten directory.
 #+begin_src emacs-lisp :tangle yes
 (setq org-roam-directory "~/Zettelkasten")
+#+end_src
+*** UI
+#+begin_src emacs-lisp :tangle yes
+(use-package! org-roam-ui
+  :after org-roam
+  )
+#+end_src
+*** The concept
+We have two different kinds of notes. *Fleeting notes* and *permanent notes*.
+** Org Journal
+This sets the path to the directory where to journal notes are located.
+#+begin_src emacs-lisp :tangle yes
+(setq org-journal-dir "~/Tagebuch")
+#+end_src
+** Center Buffers
+This centers org mode buffers. Looks nicer if the org buffer takes up the whole screen.
+#+begin_src emacs-lisp :tangle yes
+
+  (defun mp/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+  (use-package visual-fill-column
+    :hook (org-mode . mp/org-mode-visual-fill))
+
 #+end_src
