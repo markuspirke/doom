@@ -30,15 +30,20 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 #+begin_src emacs-lisp :tangle yes
 
   ;; Automatically tangle our Emacs.org config file when we save it
-  (defun mp/org-babel-tangle-config ()
-    (when (string-equal (file-name-directory (buffer-file-name))
-                        (expand-file-name user-emacs-directory))
-      ;; Dynamic scoping to the rescue
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
+  ;; (defun doom/org-babel-tangle-config ()
+  ;;   (when (string-equal (file-name-directory (buffer-file-name))
+  ;;                       (expand-file-name user-emacs-directory))
+  ;;     ;; Dynamic scoping to the rescue
+  ;;     (let ((org-confirm-babel-evaluate nil))
+  ;;       (org-babel-tangle))))
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'mp/org-babel-tangle-config)))
+  ;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'doom/org-babel-tangle-config)))
 
+(defun mp/tangle-on-save-org-mode-file()
+  (when (string= (message "%s" major-mode) "org-mode")
+    (org-babel-tangle)))
+
+(add-hook 'after-save-hook 'mp/tangle-on-save-org-mode-file)
 #+end_src
 ** Nice Bullets
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
