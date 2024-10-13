@@ -18,6 +18,15 @@ We use the package circadian to change between a light and dark theme.
 (column-number-mode)
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative) ;; This sets relative line numbers.
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                org-agenda-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+(add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 ** No titlebar
 #+begin_src emacs-lisp :tangle yes
@@ -35,8 +44,8 @@ We use the package circadian to change between a light and dark theme.
   :ensure t)
 #+end_src
 * Keybindings
-#+begin_src emacs-lisp :tangle yes
 Not like this! This will destroy movement in fuzzy search.
+#+begin_src emacs-lisp :tangle yes
 ;; (bind-key* "C-j" #'evil-window-down)
 ;; (bind-key* "C-k" #'evil-window-up)
 ;; (bind-key* "C-h" #'evil-window-left)

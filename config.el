@@ -10,6 +10,15 @@
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative) ;; This sets relative line numbers.
 
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                org-agenda-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+(add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 ;; No titlebar
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
@@ -19,7 +28,6 @@
 (use-package nerd-icons
   :ensure t)
 
-Not like this! This will destroy movement in fuzzy search.
 ;; (bind-key* "C-j" #'evil-window-down)
 ;; (bind-key* "C-k" #'evil-window-up)
 ;; (bind-key* "C-h" #'evil-window-left)
