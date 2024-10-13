@@ -1,7 +1,7 @@
 (use-package circadian
   :ensure t
   :config
-  (setq circadian-themes '(("6:00" . doom-one-light)
+  (setq circadian-themes '(("6:00" . doom-feather-light)
                            ("15:00" . doom-palenight)))
   (circadian-setup))
 
@@ -19,17 +19,61 @@
 (use-package nerd-icons
   :ensure t)
 
+Not like this! This will destroy movement in fuzzy search.
+;; (bind-key* "C-j" #'evil-window-down)
+;; (bind-key* "C-k" #'evil-window-up)
+;; (bind-key* "C-h" #'evil-window-left)
+;; (bind-key* "C-l" #'evil-window-right)
+
 (use-package org
         :config
-        (setq org-ellipsis " ▾") ;; symbol if header is closed
         (setq org-agenda-start-with-log-mode t)
         (setq org-log-done 'time)
         (setq org-log-into-drawer t)
         (setq org-directory "~/Org/") ;; last / was necessary
         (setq org-agenda-files '("todos.org"))
         (setq org-agenda-hide-tags-regexp ".*")
+        (setq org-todo-keywords
+        '((sequence "TODO(t)" "READ(r)" "|" "DONE(d)")))
 )
 
+(custom-set-faces!
+  `(outline-1 :height 1.3 :foreground ,(nth 1 (nth 14 doom-themes--colors)))
+  `(outline-2 :height 1.25 :foreground ,(nth 1 (nth 15 doom-themes--colors)))
+  `(outline-3 :height 1.2 :foreground ,(nth 1 (nth 19 doom-themes--colors)))
+  `(outline-4 :height 1.1 :foreground ,(nth 1 (nth 23 doom-themes--colors)))
+  `(outline-5 :height 1.1 :foreground ,(nth 1 (nth 24 doom-themes--colors)))
+  `(outline-6 :height 1.1 :foreground ,(nth 1 (nth 16 doom-themes--colors)))
+  `(outline-7 :height 1.05 :foreground ,(nth 1 (nth 18 doom-themes--colors)))
+  `(outline-8 :height 1.05 :foreground ,(nth 1 (nth 11 doom-themes--colors)))
+  )
+
+(setq
+ ;; Edit settings
+ org-auto-align-tags nil
+ org-tags-column 0
+ org-catch-invisible-edits 'show-and-error
+ org-special-ctrl-a/e t
+ org-insert-heading-respect-content t
+ org-modern-fold-stars '(("◉" . "◉") ("○" . "○") ("●" . "●") ("○" . "○"))
+
+ ;; Org styling, hide markup etc.
+ org-hide-emphasis-markers t
+ org-pretty-entities t
+
+ ;; Agenda styling
+ org-agenda-tags-column 0
+ org-agenda-block-separator ?─
+ org-agenda-time-grid
+ '((daily today require-timed)
+   (800 1000 1200 1400 1600 1800 2000)
+   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+ org-agenda-current-time-string
+ "◀── now ─────────────────────────────────────────────────")
+
+;; Ellipsis styling
+(setq org-ellipsis " ▾") ;; symbol if header is closed
+(set-face-attribute 'org-ellipsis nil :inherit 'default :box nil)
 (with-eval-after-load 'org (global-org-modern-mode))
 
 (defun mp/org-agenda-open-hook ()
@@ -37,6 +81,16 @@
   (olivetti-mode))
 
 (add-hook 'org-agenda-mode-hook 'mp/org-agenda-open-hook)
+
+;; Custom styles for dates in agenda
+(custom-set-faces!
+  '(org-agenda-date :inherit outline-1 :height 1.01)
+  '(org-agenda-date-today :inherit outline-2 :height 1.01)
+  '(org-agenda-date-weekend :inherit outline-1 :height 1.01)
+  '(org-agenda-date-weekend-today :inherit outline-2 :height 1.01)
+  '(org-super-agenda-header :inherit custom-button :weight bold :height 1.01)
+  `(link :foreground unspecified :underline nil :background ,(nth 1 (nth 7 doom-themes--colors)))
+  '(org-link :foreground unspecified))
 
 (setq org-agenda-prefix-format '(
   (agenda . " %?-2i %t ")
@@ -51,15 +105,40 @@
         ("privat" (nerd-icons-mdicon "󰏚" :height 0.8 :v-adjust 0) nil nil :ascent center)
         ))
 
-  ;; Automatically tangle our Emacs.org config file when we save it
-  ;; (defun doom/org-babel-tangle-config ()
-  ;;   (when (string-equal (file-name-directory (buffer-file-name))
-  ;;                       (expand-file-name user-emacs-directory))
-  ;;     ;; Dynamic scoping to the rescue
-  ;;     (let ((org-confirm-babel-evaluate nil))
-  ;;       (org-babel-tangle))))
+(require 'org-super-agenda)
 
-  ;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'doom/org-babel-tangle-config)))
+(setq org-super-agenda-groups
+      '(
+        (:name "! Overdue "
+               :scheduled past
+               :order 2
+               :face 'error)
+        (:name " Today "
+               :time-grid t
+               :date today
+               :scheduled today
+               :order 1
+               :face 'warning)
+        (:name "Teaching "
+               :and(:category "teaching")
+               :order 3)
+        (:name "Haus "
+               :and(:category "home")
+               :order 3)
+        (:name "Privat "
+               :and(:category "private")
+               :order 3)
+        ))
+
+(org-super-agenda-mode t)
+
+(map! :desc "Next Line"
+      :map org-super-agenda-header-map
+      "j" 'org-agenda-next-line)
+
+(map! :desc "Next Line"
+      :map org-super-agenda-header-map
+      "k" 'org-agenda-previous-line)
 
 (defun mp/tangle-on-save-org-mode-file()
   (when (string= (message "%s" major-mode) "org-mode")
