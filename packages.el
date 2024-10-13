@@ -55,3 +55,4 @@
 (package! org-modern)
 (package! olivetti)
 (package! all-the-icons)
+(package! org-super-agenda)

@@ -69,19 +69,43 @@ We use the package circadian to change between a light and dark theme.
         ("privat" (nerd-icons-mdicon "󰏚" :height 0.8 :v-adjust 0) nil nil :ascent center)
         ))
 #+end_src
-** Auto-tangle Configuration Files
-
-This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
-
+** Org Super Agenda
 #+begin_src emacs-lisp :tangle yes
+(require 'org-super-agenda)
 
-  ;; Automatically tangle our Emacs.org config file when we save it
-  ;; (defun doom/org-babel-tangle-config ()
-  ;;   (when (string-equal (file-name-directory (buffer-file-name))
-  ;;                       (expand-file-name user-emacs-directory))
-  ;;     ;; Dynamic scoping to the rescue
-  ;;     (let ((org-confirm-babel-evaluate nil))
-  ;;       (org-babel-tangle))))
+(setq org-super-agenda-groups
+      '(
+        (:name "! Overdue "
+               :scheduled past
+               :order 2
+               :face 'error)
+        (:name " Today "
+               :time-grid t
+               :date today
+               :scheduled today
+               :order 1
+               :face 'warning)
+        (:name "Teaching "
+               :and(:category "teaching")
+               :order 3)
+        (:name "Haus "
+               :and(:category "home")
+               :order 3)
+        (:name "Privat "
+               :and(:category "private")
+               :order 3)
+        ))
+
+(org-super-agenda-mode t)
+
+(map! :desc "Next Line"
+      :map org-super-agenda-header-map
+      "j" 'org-agenda-next-line)
+
+(map! :desc "Next Line"
+      :map org-super-agenda-header-map
+      "k" 'org-agenda-previous-line)
+#+end_src
 
   ;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'doom/org-babel-tangle-config)))
 
