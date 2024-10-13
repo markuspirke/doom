@@ -48,3 +48,10 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
+;;
+(package! org-roam-ui)
+(package! circadian)
+(package! visual-fill-column)
+(package! org-modern)
+(package! olivetti)
+(package! all-the-icons)
