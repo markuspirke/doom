@@ -15,6 +15,7 @@
                 term-mode-hook
                 org-agenda-mode-hook
                 shell-mode-hook
+                vterm-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook))
 (add-hook mode (lambda () (display-line-numbers-mode 0))))
