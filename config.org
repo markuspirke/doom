@@ -229,3 +229,22 @@ This centers org mode buffers. Looks nicer if the org buffer takes up the whole 
     :hook (org-mode . mp/org-mode-visual-fill))
 
 #+end_src
+* Spelling
+** Flyspell-correct
+This seems to be a great package for finding spelling mistakes. Some conflicts with flyspell-mode.
+One needs to install a two external dependencies.
+#+begin_src bash
+homebrew install enchant
+homebrew install pkgconf
+#+end_src
+The latter one had conflicts on my system, as I already had installed something similar called /pkg-config/. But it worked nonetheless.
+#+begin_src emacs-lisp :tangle yes
+(use-package jinx
+  :ensure t
+  :hook ((LaTeX-mode . jinx-mode)
+         (latex-mode . jinx-mode)
+         (org-mode . jinx-mode)
+         (text-mode . jinx-mode)))
+;; this turns of the flyspell-mode when an org document is opened
+(remove-hook 'org-mode-hook #'flyspell-mode)
+#+end_src

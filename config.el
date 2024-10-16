@@ -175,3 +175,12 @@
 
   (use-package visual-fill-column
     :hook (org-mode . mp/org-mode-visual-fill))
+
+(use-package jinx
+  :ensure t
+  :hook ((LaTeX-mode . jinx-mode)
+         (latex-mode . jinx-mode)
+         (org-mode . jinx-mode)
+         (text-mode . jinx-mode)))
+;; this turns of the flyspell-mode when an org document is opened
+(remove-hook 'org-mode-hook #'flyspell-mode)
