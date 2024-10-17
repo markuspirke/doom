@@ -29,6 +29,12 @@ We use the package circadian to change between a light and dark theme.
                 eshell-mode-hook))
 (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
+
+#+RESULTS:
+** Remove tilde on empty lines
+#+begin_src emacs-lisp :tangle yes
+(remove-hook 'org-mode-hook #'vi-tilde-fringe-mode)
+#+end_src
 ** No titlebar
 #+begin_src emacs-lisp :tangle yes
 ;; No titlebar
