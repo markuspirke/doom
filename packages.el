@@ -56,3 +56,5 @@
 (package! olivetti)
 (package! all-the-icons)
 (package! org-super-agenda)
+(package! treesit-auto)
+(package! jinx)

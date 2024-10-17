@@ -20,6 +20,12 @@
                 eshell-mode-hook))
 (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+(remove-hook 'org-mode-hook #'vi-tilde-fringe-mode)
+
+;; (use-package treesit-auto
+;;   :config
+;;   (treesit-auto-add-to-auto-mode-alist 'all))
+
 ;; No titlebar
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
@@ -161,6 +167,8 @@
   ;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 (setq org-roam-directory "~/Zettelkasten")
+
+(set-file-template! 'org-mode :ignore t) ;; works
 
 (use-package! org-roam-ui
   :after org-roam
