@@ -203,6 +203,10 @@ Org roam directory will be located in the Zettelkasten directory.
 #+begin_src emacs-lisp :tangle yes
 (setq org-roam-directory "~/Zettelkasten")
 #+end_src
+*** To fix :title :title bug
+#+begin_src emacs-lisp :tangle yes
+(set-file-template! 'org-mode :ignore t) ;; works
+#+end_src
 *** UI
 #+begin_src emacs-lisp :tangle yes
 (use-package! org-roam-ui
