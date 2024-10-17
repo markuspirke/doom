@@ -35,6 +35,12 @@ We use the package circadian to change between a light and dark theme.
 #+begin_src emacs-lisp :tangle yes
 (remove-hook 'org-mode-hook #'vi-tilde-fringe-mode)
 #+end_src
+** Tree-sitter
+#+begin_src emacs-lisp :tangle yes
+;; (use-package treesit-auto
+;;   :config
+;;   (treesit-auto-add-to-auto-mode-alist 'all))
+#+end_src
 ** No titlebar
 #+begin_src emacs-lisp :tangle yes
 ;; No titlebar
