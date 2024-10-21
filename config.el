@@ -14,7 +14,7 @@
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 org-agenda-mode-hook
-                pdf-view-mode-hook
+                pdf-view-mode-hook ;; otherwise conflicts
                 shell-mode-hook
                 vterm-mode-hook
                 treemacs-mode-hook
