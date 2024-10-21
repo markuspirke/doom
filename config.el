@@ -14,11 +14,14 @@
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 org-agenda-mode-hook
+                pdf-view-mode-hook
                 shell-mode-hook
                 vterm-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook))
 (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;;
 
 (remove-hook 'org-mode-hook #'vi-tilde-fringe-mode)
 
