@@ -202,6 +202,13 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 (add-hook 'after-save-hook 'mp/tangle-on-save-org-mode-file)
 #+end_src
+** Org-Download
+#+begin_src emacs-lisp
+(require 'org-download)
+
+;; Drag-and-drop to `dired`
+(add-hook 'dired-mode-hook 'org-download-enable)
+#+end_src
 ** Nice Bullets
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 #+begin_src emacs-lisp :tangle yes

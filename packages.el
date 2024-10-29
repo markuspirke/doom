@@ -58,3 +58,4 @@
 (package! org-super-agenda)
 (package! treesit-auto)
 (package! jinx)
+(package! org-download)

@@ -167,6 +167,11 @@
 
 (add-hook 'after-save-hook 'mp/tangle-on-save-org-mode-file)
 
+(require 'org-download)
+
+;; Drag-and-drop to `dired`
+(add-hook 'dired-mode-hook 'org-download-enable)
+
   ;; (use-package org-bullets
   ;;   :hook (org-mode . org-bullets-mode)
   ;;   :custom
