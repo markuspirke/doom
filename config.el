@@ -146,6 +146,9 @@
         (:name "Privat "
                :and(:category "private")
                :order 3)
+        (:name "Arbeit"
+               :and(:category "work")
+               :order 3)
         ))
 
 (org-super-agenda-mode t)

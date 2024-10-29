@@ -32,8 +32,6 @@ We use the package circadian to change between a light and dark theme.
 
 ;;
 #+end_src
-
-#+RESULTS:
 ** Remove tilde on empty lines
 #+begin_src emacs-lisp :tangle yes
 (remove-hook 'org-mode-hook #'vi-tilde-fringe-mode)
@@ -177,6 +175,9 @@ Not like this! This will destroy movement in fuzzy search.
                :order 3)
         (:name "Privat "
                :and(:category "private")
+               :order 3)
+        (:name "Arbeit"
+               :and(:category "work")
                :order 3)
         ))
 
