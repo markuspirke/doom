@@ -53,6 +53,7 @@
         (setq org-agenda-hide-tags-regexp ".*")
         (setq org-agenda-span 7)
         (setq org-agenda-start-day "+0d")
+        (setq org-agenda-time-grid '((daily) () "" ""))
         (setq org-todo-keywords
         '((sequence "TODO(t)" "READ(r)" "|" "DONE(d)")))
 )
