@@ -51,6 +51,8 @@
         (setq org-directory "~/Org/") ;; last / was necessary
         (setq org-agenda-files '("todos.org"))
         (setq org-agenda-hide-tags-regexp ".*")
+        (setq org-agenda-span 7)
+        (setq org-agenda-start-day "+0d")
         (setq org-todo-keywords
         '((sequence "TODO(t)" "READ(r)" "|" "DONE(d)")))
 )
@@ -110,12 +112,14 @@
   `(link :foreground unspecified :underline nil :background ,(nth 1 (nth 7 doom-themes--colors)))
   '(org-link :foreground unspecified))
 
+;; this determines what is shown in the agenda
 (setq org-agenda-prefix-format '(
   (agenda . " %?-2i %t ")
   (todo . " %i %-12:c")
   (tags . " %i %-12:c")
   (search . " %i %-12:c")))
 
+;; different emojis for different categories of todos
 (setq org-agenda-category-icon-alist
       '(("work" (nerd-icons-faicon "" :height 0.8 :v-adjust 0) nil nil :ascent center)
         ("teaching" (nerd-icons-faicon "" :height 0.8 :v-adjust 0) nil nil :ascent center)
@@ -124,19 +128,21 @@
         ))
 
 (require 'org-super-agenda)
-
 (setq org-super-agenda-groups
       '(
-        (:name "! Overdue "
-               :scheduled past
-               :order 2
-               :face 'error)
         (:name " Today "
                :time-grid t
                :date today
                :scheduled today
                :order 1
                :face 'warning)
+        (:name "! Overdue "
+               :scheduled past
+               :date today
+               :order 1
+               ;; :not (:log closed)
+               ;; :discard (:todo "DONE")
+               :face 'error)
         (:name "Teaching "
                :and(:category "teaching")
                :order 3)

@@ -76,6 +76,8 @@ Not like this! This will destroy movement in fuzzy search.
         (setq org-directory "~/Org/") ;; last / was necessary
         (setq org-agenda-files '("todos.org"))
         (setq org-agenda-hide-tags-regexp ".*")
+        (setq org-agenda-span 7)
+        (setq org-agenda-start-day "+0d")
         (setq org-todo-keywords
         '((sequence "TODO(t)" "READ(r)" "|" "DONE(d)")))
 )
@@ -138,12 +140,14 @@ Not like this! This will destroy movement in fuzzy search.
   `(link :foreground unspecified :underline nil :background ,(nth 1 (nth 7 doom-themes--colors)))
   '(org-link :foreground unspecified))
 
+;; this determines what is shown in the agenda
 (setq org-agenda-prefix-format '(
   (agenda . " %?-2i %t ")
   (todo . " %i %-12:c")
   (tags . " %i %-12:c")
   (search . " %i %-12:c")))
 
+;; different emojis for different categories of todos
 (setq org-agenda-category-icon-alist
       '(("work" (nerd-icons-faicon "" :height 0.8 :v-adjust 0) nil nil :ascent center)
         ("teaching" (nerd-icons-faicon "" :height 0.8 :v-adjust 0) nil nil :ascent center)
@@ -152,21 +156,24 @@ Not like this! This will destroy movement in fuzzy search.
         ))
 #+end_src
 ** Org Super Agenda
+Org Super Agenda organizes contents in the agenda view more nicely. Maybe this could be improved in the future.
 #+begin_src emacs-lisp :tangle yes
 (require 'org-super-agenda)
-
 (setq org-super-agenda-groups
       '(
-        (:name "! Overdue "
-               :scheduled past
-               :order 2
-               :face 'error)
         (:name " Today "
                :time-grid t
                :date today
                :scheduled today
                :order 1
                :face 'warning)
+        (:name "! Overdue "
+               :scheduled past
+               :date today
+               :order 1
+               ;; :not (:log closed)
+               ;; :discard (:todo "DONE")
+               :face 'error)
         (:name "Teaching "
                :and(:category "teaching")
                :order 3)
@@ -257,7 +264,7 @@ This centers org mode buffers. Looks nicer if the org buffer takes up the whole 
 
 #+end_src
 * Spelling
-** Flyspell-correct
+** Jinx-correct
 This seems to be a great package for finding spelling mistakes. Some conflicts with flyspell-mode.
 One needs to install a two external dependencies.
 #+begin_src bash
