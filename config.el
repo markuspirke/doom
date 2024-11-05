@@ -2,7 +2,7 @@
   :ensure t
   :config
   (setq circadian-themes '(("6:00" . doom-feather-light)
-                           ("15:00" . doom-palenight)))
+                           ("10:00" . doom-palenight)))
   (circadian-setup))
 
 ;; Linenumber

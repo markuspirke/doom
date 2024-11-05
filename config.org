@@ -8,7 +8,7 @@ We use the package circadian to change between a light and dark theme.
   :ensure t
   :config
   (setq circadian-themes '(("6:00" . doom-feather-light)
-                           ("15:00" . doom-palenight)))
+                           ("10:00" . doom-palenight)))
   (circadian-setup))
 #+end_src
 * UI
