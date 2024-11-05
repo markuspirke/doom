@@ -216,6 +216,10 @@
   (use-package visual-fill-column
     :hook (org-mode . mp/org-mode-visual-fill))
 
+;; Enable LSP mode for Julia
+(setq lsp-julia-package-dir nil)
+(setq lsp-julia-default-environment "~/.julia/environments/v1.11")
+
 (use-package jinx
   :ensure t
   :hook ((LaTeX-mode . jinx-mode)
