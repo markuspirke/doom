@@ -22,6 +22,20 @@
 (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;;
+;; I prefer visual lines
+(setq display-line-numbers-type 'visual
+      line-move-visual t)
+(use-package-hook! evil
+  :pre-init
+  (setq evil-respect-visual-line-mode t) ;; sane j and k behavior
+  t)
+
+;; I also like evil mode visual movement
+(map! :map evil-normal-state-map
+      :desc "Move to next visual line"
+      "j" 'evil-next-visual-line
+      :desc "Move to previous visual line"
+      "k" 'evil-previous-visual-line)
 
 (remove-hook 'org-mode-hook #'vi-tilde-fringe-mode)
 
