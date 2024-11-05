@@ -210,3 +210,13 @@
          (text-mode . jinx-mode)))
 ;; this turns of the flyspell-mode when an org document is opened
 (remove-hook 'org-mode-hook #'flyspell-mode)
+
+;; (require 'mu4e)
+(use-package mu4e
+        :ensure nil
+        :config
+        (setq mu4e-change-filenames-when-moving t)
+        (setq mu4e-update-interval (* 10 60))
+        (setq mu4e-get-mail-command "mbsync -a")
+        (setq mu4e-maildir-list '("$HOME/Mail"))
+        )
