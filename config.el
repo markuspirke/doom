@@ -220,6 +220,13 @@
 (setq lsp-julia-package-dir nil)
 (setq lsp-julia-default-environment "~/.julia/environments/v1.11")
 
+(defun mp/snakemake-open-hook ()
+  "Hook to be run when org-agenda is opened"
+   (when (string-match-p "Snakefile" (buffer-file-name))
+    (snakemake-mode)))
+
+(add-hook 'find-file-hook 'mp/snakemake-open-hook)
+
 (use-package jinx
   :ensure t
   :hook ((LaTeX-mode . jinx-mode)

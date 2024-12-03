@@ -59,3 +59,4 @@
 (package! treesit-auto)
 (package! jinx)
 (package! org-download)
+(package! snakemake-mode)

@@ -287,6 +287,17 @@ The latter one needs to match the Julia environment where the two packages are i
 (setq lsp-julia-package-dir nil)
 (setq lsp-julia-default-environment "~/.julia/environments/v1.11")
 #+end_src
+** Snakemake
+We can use the *snakemake-mode* package for writing Snake files.
+Then we can define the following hook, which actives the /snakemake-mode/ when we open a file with the filename *Snakefile*.
+#+begin_src emacs-lisp :tangle yes
+(defun mp/snakemake-open-hook ()
+  "Hook to be run when org-agenda is opened"
+   (when (string-match-p "Snakefile" (buffer-file-name))
+    (snakemake-mode)))
+
+(add-hook 'find-file-hook 'mp/snakemake-open-hook)
+#+end_src
 * Spelling
 ** Jinx-correct
 This seems to be a great package for finding spelling mistakes. Some conflicts with flyspell-mode.
