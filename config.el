@@ -46,11 +46,13 @@
 ;; No titlebar
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
-(doom/set-frame-opacity 90) ;; Sets the transparency to 90% at start of doom.
+(doom/set-frame-opacity 95) ;; Sets the transparency to 90% at start of doom.
 ;; (setq doom/set-frame-opacity 90)
 
 (use-package nerd-icons
   :ensure t)
+
+(good-scroll-mode t)
 
 (define-key evil-motion-state-map (kbd "C-h") #'evil-window-left)
 (define-key evil-motion-state-map (kbd "C-j") #'evil-window-down)
@@ -202,9 +204,20 @@
 
 (set-file-template! 'org-mode :ignore t) ;; works
 
+(use-package! websocket
+    :after org-roam)
+
 (use-package! org-roam-ui
-  :after org-roam
-  )
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+    :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 
 (setq org-journal-dir "~/Tagebuch")
 
@@ -221,7 +234,7 @@
 (setq lsp-julia-default-environment "~/.julia/environments/v1.11")
 
 (defun mp/snakemake-open-hook ()
-  "Hook to be run when org-agenda is opened"
+  "Hook to be run when Snakefile is opened"
    (when (string-match-p "Snakefile" (buffer-file-name))
     (snakemake-mode)))
 
@@ -232,9 +245,17 @@
   :hook ((LaTeX-mode . jinx-mode)
          (latex-mode . jinx-mode)
          (org-mode . jinx-mode)
-         (text-mode . jinx-mode)))
+         (text-mode . jinx-mode))
+  ;; :config
+  ;; (setq jinx-languages '("en_US" "de"))
+  )
 ;; this turns of the flyspell-mode when an org document is opened
 (remove-hook 'org-mode-hook #'flyspell-mode)
+;; Shortcut for correct word
+(map! :leader
+      (:prefix ("e" . "edit")
+      :desc "Correct word"
+      "w" #'jinx-correct-word))
 
 ;; (require 'mu4e)
 (use-package mu4e

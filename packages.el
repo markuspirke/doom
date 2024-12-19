@@ -49,6 +49,7 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 ;;
+(unpin! org-roam)
 (package! org-roam-ui)
 (package! circadian)
 (package! visual-fill-column)
@@ -60,3 +61,4 @@
 (package! jinx)
 (package! org-download)
 (package! snakemake-mode)
+(package! good-scroll)

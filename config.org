@@ -63,13 +63,17 @@ We use the package circadian to change between a light and dark theme.
 #+end_src
 ** Transparency
 #+begin_src emacs-lisp :tangle yes
-(doom/set-frame-opacity 90) ;; Sets the transparency to 90% at start of doom.
+(doom/set-frame-opacity 95) ;; Sets the transparency to 90% at start of doom.
 ;; (setq doom/set-frame-opacity 90)
 #+end_src
 ** Icons
 #+begin_src emacs-lisp :tangle yes
 (use-package nerd-icons
   :ensure t)
+#+end_src
+** Scrolling
+#+begin_src emacs-lisp :tangle yes
+(good-scroll-mode t)
 #+end_src
 * Keybindings
 Not like this! This will destroy movement in fuzzy search.
@@ -254,9 +258,20 @@ Org roam directory will be located in the Zettelkasten directory.
 #+end_src
 *** UI
 #+begin_src emacs-lisp :tangle yes
+(use-package! websocket
+    :after org-roam)
+
 (use-package! org-roam-ui
-  :after org-roam
-  )
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+    :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 #+end_src
 *** The concept
 We have two different kinds of notes. *Fleeting notes* and *permanent notes*.
@@ -279,10 +294,11 @@ This centers org mode buffers. Looks nicer if the org buffer takes up the whole 
 
 #+end_src
 * Language servers
+** Julia
 First we need some Julia environment where /LanguageServer.jl/ and /SymbolServer.jl/ is installed.
 Then we neeed to set we set the following two variables inside Emacs.
 The latter one needs to match the Julia environment where the two packages are installed.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; Enable LSP mode for Julia
 (setq lsp-julia-package-dir nil)
 (setq lsp-julia-default-environment "~/.julia/environments/v1.11")
@@ -292,7 +308,7 @@ We can use the *snakemake-mode* package for writing Snake files.
 Then we can define the following hook, which actives the /snakemake-mode/ when we open a file with the filename *Snakefile*.
 #+begin_src emacs-lisp :tangle yes
 (defun mp/snakemake-open-hook ()
-  "Hook to be run when org-agenda is opened"
+  "Hook to be run when Snakefile is opened"
    (when (string-match-p "Snakefile" (buffer-file-name))
     (snakemake-mode)))
 
@@ -313,9 +329,17 @@ The latter one had conflicts on my system, as I already had installed something 
   :hook ((LaTeX-mode . jinx-mode)
          (latex-mode . jinx-mode)
          (org-mode . jinx-mode)
-         (text-mode . jinx-mode)))
+         (text-mode . jinx-mode))
+  ;; :config
+  ;; (setq jinx-languages '("en_US" "de"))
+  )
 ;; this turns of the flyspell-mode when an org document is opened
 (remove-hook 'org-mode-hook #'flyspell-mode)
+;; Shortcut for correct word
+(map! :leader
+      (:prefix ("e" . "edit")
+      :desc "Correct word"
+      "w" #'jinx-correct-word))
 #+end_src
 * Email
 #+begin_src emacs-lisp :tangle yes
