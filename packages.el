@@ -62,3 +62,4 @@
 (package! org-download)
 (package! snakemake-mode)
 (package! good-scroll)
+(package! ox-hugo)
