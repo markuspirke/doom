@@ -229,6 +229,28 @@
   (use-package visual-fill-column
     :hook (org-mode . mp/org-mode-visual-fill))
 
+;; Load ox-latex and add custom class
+(use-package! ox-latex
+  :after org
+  :config
+  (add-to-list 'org-latex-classes
+               '("org-exesheet"
+                 "\\documentclass{exesheet}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+[EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+;; Enable ox-extra (for ignoring headlines etc.)
+(use-package! ox-extra
+  :after org
+  :config
+  (ox-extras-activate '(ignore-headlines)))
+
 ;; Enable LSP mode for Julia
 (setq lsp-julia-package-dir nil)
 (setq lsp-julia-default-environment "~/.julia/environments/v1.11")
@@ -307,77 +329,41 @@
                 (mu4e-trash-folder  . "/iCloud/Deleted Messages")
                 (mu4e-refile-folder . "/iCloud/Archive")))))
 
-;; Highlights all matches of the selection in the buffer.
-(define-key evil-visual-state-map "R" 'evil-multiedit-match-all)
-
-;; Match the word under cursor (i.e. make it an edit region). Consecutive presses will
-;; incrementally add the next unmatched match.
-(define-key evil-normal-state-map (kbd "M-d") 'evil-multiedit-match-and-next)
-;; Match selected region.
-(define-key evil-visual-state-map (kbd "M-d") 'evil-multiedit-match-and-next)
-;; Insert marker at point
-(define-key evil-insert-state-map (kbd "M-d") 'evil-multiedit-toggle-marker-here)
-
-;; Same as M-d but in reverse.
-(define-key evil-normal-state-map (kbd "M-D") 'evil-multiedit-match-and-prev)
-(define-key evil-visual-state-map (kbd "M-D") 'evil-multiedit-match-and-prev)
-
-;; OPTIONAL: If you prefer to grab symbols rather than words, use
-;; `evil-multiedit-match-symbol-and-next` (or prev).
-
-;; Restore the last group of multiedit regions.
-(define-key evil-visual-state-map (kbd "C-M-D") 'evil-multiedit-restore)
-
-;; RET will toggle the region under the cursor
-(define-key evil-multiedit-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
-
-;; ...and in visual mode, RET will disable all fields outside the selected region
-(define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
-
-;; For moving between edit regions
-(define-key evil-multiedit-state-map (kbd "C-n") 'evil-multiedit-next)
-(define-key evil-multiedit-state-map (kbd "C-p") 'evil-multiedit-prev)
-(define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-next)
-(define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-prev)
-
-;; Ex command that allows you to invoke evil-multiedit with a regular expression, e.g.
-(evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match)
-
 (setq +latex-viewers '(pdf-tools))
 (add-to-list 'auto-mode-alist '("\\.tex\\'" . LaTeX-mode))
 (after! latex
   (add-hook 'LaTeX-mode-hook #'lsp!))
 
-(defun my/copy-latex-math-region ()
-  "Copy the content between the nearest pair of $...$ surrounding point."
-  (interactive)
-  (save-excursion
-    (let (beg end)
-      ;; Search backward for opening $
-      (unless (search-backward "$" nil t)
-        (error "No opening $ found"))
-      ;; Make sure it's not $$
-      (while (looking-back "\\$" 1)
-        (backward-char)
-        (unless (search-backward "$" nil t)
-          (error "No opening $ found")))
-      (forward-char)
-      (setq beg (point))
-      ;; Search forward for closing $
-      (unless (search-forward "$" nil t)
-        (error "No closing $ found"))
-      (setq end (1- (point)))
-      (kill-ring-save beg end)
-      (message "Copied LaTeX math content: %s" (buffer-substring-no-properties beg end)))))
+;; (defun my/copy-latex-math-region ()
+;;   "Copy the content between the nearest pair of $...$ surrounding point."
+;;   (interactive)
+;;   (save-excursion
+;;     (let (beg end)
+;;       ;; Search backward for opening $
+;;       (unless (search-backward "$" nil t)
+;;         (error "No opening $ found"))
+;;       ;; Make sure it's not $$
+;;       (while (looking-back "\\$" 1)
+;;         (backward-char)
+;;         (unless (search-backward "$" nil t)
+;;           (error "No opening $ found")))
+;;       (forward-char)
+;;       (setq beg (point))
+;;       ;; Search forward for closing $
+;;       (unless (search-forward "$" nil t)
+;;         (error "No closing $ found"))
+;;       (setq end (1- (point)))
+;;       (kill-ring-save beg end)
+;;       (message "Copied LaTeX math content: %s" (buffer-substring-no-properties beg end)))))
 
-(use-package! evil-textobj-anyblock
-  :after evil
-  :config
-  ;; Define a $...$ text object using evil-textobj-anyblock
-  (define-key evil-inner-text-objects-map "$"
-    (evil-textobj-anyblock--make-textobj ?$))
-  (define-key evil-outer-text-objects-map "$"
-    (evil-textobj-anyblock--make-textobj ?$ t)))
+;; (use-package! evil-textobj-anyblock
+;;   :after evil
+;;   :config
+;;   ;; Define a $...$ text object using evil-textobj-anyblock
+;;   (define-key evil-inner-text-objects-map "$"
+;;     (evil-textobj-anyblock--make-textobj ?$))
+;;   (define-key evil-outer-text-objects-map "$"
+;;     (evil-textobj-anyblock--make-textobj ?$ t)))
 
 (use-package! cdlatex
   :hook (LaTeX-mode . turn-on-cdlatex))
