@@ -59,6 +59,10 @@
 (define-key evil-motion-state-map (kbd "C-k") #'evil-window-up)
 (define-key evil-motion-state-map (kbd "C-l") #'evil-window-right)
 
+(use-package! evil-escape
+    :init
+    (setq evil-escape-key-sequence "jk"))
+
 (use-package org
         :config
         (setq org-agenda-start-with-log-mode t)

@@ -83,6 +83,13 @@ Not like this! This will destroy movement in fuzzy search.
 (define-key evil-motion-state-map (kbd "C-k") #'evil-window-up)
 (define-key evil-motion-state-map (kbd "C-l") #'evil-window-right)
 #+end_src
+
+Use *jk* to escape.
+#+begin_src emacs-lisp :tangle yes
+(use-package! evil-escape
+    :init
+    (setq evil-escape-key-sequence "jk"))
+#+end_src
 * Org mode
 ** General things
 #+begin_src emacs-lisp :tangle yes
